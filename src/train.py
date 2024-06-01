@@ -19,8 +19,8 @@ class GameLearning():
 
         self.games_played = 0
         self.ties = 0
-        self.white_win = 0
-        self.black_win = 0
+        self.agent_wins = 0
+        self.minimax_wins = 0
 
     def begin_teaching(self, episodes):
         while self.games_played < episodes:
@@ -28,8 +28,8 @@ class GameLearning():
             self.start()
             self.games_played += 1
             
-        print("Vitórias Branco: " + str(self.white_win))
-        print("Vitórias Preto: " + str(self.black_win))
+        print("Vitórias Q-Learning: " + str(self.agent_wins))
+        print("Vitórias Minimax: " + str(self.minimax_wins))
         print("Empates: " + str(self.ties))
         
         self.agent.save()
@@ -50,13 +50,15 @@ class GameLearning():
         if (self.game.tie):
             self.ties += 1
             print("Houve empate!")
-        elif (self.game.white):
-            self.white_win += 1
-            print("O branco ganhou!")
         else:
-            self.black_win += 1
-            print("O preto ganhou!")
+            print("O branco ganhou!") if self.game.white else print("O preto ganhou!")
+            
+            if(order[0] == "Minimax"):
+                self.minimax_wins += 1
+            else:
+                self.agent_wins += 1
+            
 
 game = GameLearning()
-game.begin_teaching(5)
+game.begin_teaching(1)
 

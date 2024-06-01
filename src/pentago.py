@@ -37,6 +37,39 @@ class Pentago:
             text.append(start)
             
         return ''.join(text)
+    
+    def action_validate(self, action):
+        parameters = re.split(' |/', action)
+
+        if(len(parameters) < 3):
+            print("Movimentação fora do padrão solicitado")
+            return False
+
+        if(parameters[0].isdigit() and parameters[1].isdigit() and parameters[2][0].isdigit()):
+            block = int(parameters[0]) - 1
+            position = int(parameters[1]) - 1
+            block_rotation = int(parameters[2][0]) - 1
+
+            if((block < 0 or block > 3) or (position < 0 or position > 8)):
+                print("Movimento inválido")
+                return False
+            elif (self.blocks[block][position] != None):
+                print("Movimento inválido")
+                return False
+            
+            if(block_rotation < 0 or block_rotation > 3):
+                print("Número do bloco para rotação inválido")
+                return False    
+        else:
+            print("Dados inválidos. Os blocos e a posição devem ser enviadas no formato númerico")
+            return False
+
+        rotation = parameters[2][1]
+        if(rotation not in ("l", "r", "L", "R")):
+            print("Rotação inválida")
+            return False
+        
+        return True
 
     def play(self, action):
         actions = re.split(' |/', action)
