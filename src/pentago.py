@@ -110,6 +110,9 @@ class Pentago:
         white = self.calc_utility(W, B)
         black = -self.calc_utility(B, W)
 
+        if(len(self.possible_actions()) == 0):
+            self.tie = True
+
         if (white == self.util_max):
             self.white = True
         

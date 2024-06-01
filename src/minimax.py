@@ -17,11 +17,11 @@ class Minimax:
             elif(game.utility() == game.util_min):
                 return game.util_min
             else:
-                actions = game.possible_actions()
-
                 best_action = None
                 best_util = None
 
+                actions = game.possible_actions()
+                 
                 for action in actions:
                     next = game.copy()
                     next.play(action)
@@ -36,6 +36,12 @@ class Minimax:
                     if(best_action == None):
                         best_action = action
                         best_util = next_util
+
+                    if(next_util == None):
+                        next_util = 0
+                    
+                    if(best_util == None):
+                        best_util = 0
                     
                     if(best_util < next_util if game.first_player_turn else best_util > next_util):
                         best_action = action
@@ -61,9 +67,6 @@ class Minimax:
 
         action = self.alpha_beta(game, deep_max)
         game.play(action)
-
-        print("Nós expandidos:", self.node_expanded)
-        print("Profundidade expandida:", self.deep_expanded, "\n")
 
         self.visited.clear()
         return action 
