@@ -25,6 +25,7 @@ class GameLearning():
     def begin_teaching(self, episodes):
         while self.games_played < episodes:
             self.game = Pentago.Pentago()
+            print(f"============= INICIANDO JOGO {self.games_played} =============")
             self.start()
             self.games_played += 1
             
@@ -60,5 +61,4 @@ class GameLearning():
             
 
 game = GameLearning()
-game.begin_teaching(1)
-
+game.begin_teaching(600)

@@ -95,12 +95,15 @@ class Agent():
 
     def update(self, s, s_, a, r):
         string_s = self.get_state_key(s)
-        string_s_ = self.get_state_key(s_)
+        string_s_ = self.get_state_key(s_) if s_ is not None else None
 
         if s_ is not None:
             possible_actions = self.possible_actions(s_)
             Q_options = [self.Q[action][string_s_] for action in possible_actions]
-            self.Q[a][string_s] += self.alpha*(r + self.gamma*max(Q_options) - self.Q[a][string_s])
+            if Q_options:
+                self.Q[a][string_s] += self.alpha*(r + self.gamma*max(Q_options) - self.Q[a][string_s])
+            else:
+                self.Q[a][string_s] += self.alpha*(r - self.Q[a][string_s])
         else:
             self.Q[a][string_s] += self.alpha*(r - self.Q[a][string_s])
 
