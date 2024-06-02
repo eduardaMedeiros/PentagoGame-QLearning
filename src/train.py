@@ -26,19 +26,19 @@ class GameLearning():
         self.oponent_wins = 0
 
     def begin_teaching(self, episodes):
-        while (self.games_played < episodes) and (self.size_path <= 1 * 1024 * 1024 * 1024):
+        while (self.games_played < episodes) and (self.size_path <= 1 * (1024 ** 3)):
             self.games_played += 1
             self.game = Pentago.Pentago()
 
             print(f"============= INICIANDO JOGO {self.games_played} =============")
             self.start()
 
-            self.size_path = os.path.getsize(self.path)
             if self.games_played % 1000 == 0:
+                self.size_path = os.path.getsize(self.path)
                 self.agent.save()
                 self.agent.save_crv()
 
-        self.agent.save()
+        #self.agent.save()
         self.agent.save_crv()
 
         print("Vitórias Q-Learning: " + str(self.agent_wins))
