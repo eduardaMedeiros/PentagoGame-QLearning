@@ -14,6 +14,8 @@ class Agent():
         self.eps = eps
         self.eps_decay = eps_decay
 
+        self.player = None
+
         self.Q = {}
         self.actions = self.possible_actions( [[None] * 9 for _ in range(4)])   
         for action in self.actions:
@@ -38,8 +40,8 @@ class Agent():
         self.eps *= (1.-self.eps_decay)
         return action
     
-    def get_reward(self, game, a, player):
-        opponent = B if player == W else W
+    def get_reward(self, game, a):
+        opponent = B if self.player == W else W
         reward = 0
 
         s = game.copy()
@@ -48,7 +50,7 @@ class Agent():
         if s.tie:
             return 500
         if s.win:
-            return 1000 if player == W else -1000
+            return 1000 if (self.player == W and game.white) or (self.player == B and game.black) else -1000
 
         lines = s.get_lines()
         updates = []
@@ -63,29 +65,29 @@ class Agent():
             elif s.get_sequences(update, opponent, 3):
                 reward -= 115
                 pass
-            elif s.get_sequences(update, 4 * opponent + player, 1) or (update, player + 4 * opponent, 1):
+            elif s.get_sequences(update, 4 * opponent + self.player, 1) or (update, self.player + 4 * opponent, 1):
                 reward += 110
                 pass
-            elif s.get_sequences(update, 3* opponent + player, 1)  or (update, player + 3 * opponent, 1):
+            elif s.get_sequences(update, 3* opponent + self.player, 1)  or (update, self.player + 3 * opponent, 1):
                 reward += 60
                 pass
-            elif s.get_sequences(update, player, 4):
+            elif s.get_sequences(update, self.player, 4):
                 reward += 100
                 pass
-            elif s.get_sequences(update, player, 3):
+            elif s.get_sequences(update, self.player, 3):
                 reward += 50
                 pass
-            elif s.get_sequences(update, player, 2):
+            elif s.get_sequences(update, self.player, 2):
                 reward += 25
                 pass
-            elif s.get_sequences(update, player, 1):
+            elif s.get_sequences(update, self.player, 1):
                 reward += 10
                 pass
       
         return reward
 
     def get_state_key(self, s):
-        key = ''
+        key = self.player + '-'
         for row in s:
             for elt in row:
                 if elt == None:
@@ -118,11 +120,11 @@ class Agent():
         return actions
     
     def play(self, game):
-        player = W if game.first_player_turn else B
+        self.player = W if game.first_player_turn else B
 
         s = game.blocks
         a = self.get_action(s)
-        r = self.get_reward(game, a, player)
+        r = self.get_reward(game, a)
 
         game.play(a)
         

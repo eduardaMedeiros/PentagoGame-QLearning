@@ -15,6 +15,7 @@ class GameLearning():
             with open(self.path, 'rb') as f:
                 self.agent = pickle.load(f)
         else:
+            self.size_path = 0
             self.agent = Agent.Agent(alpha, gamma, eps)
 
         self.minimax = Minimax.Minimax()
@@ -31,12 +32,12 @@ class GameLearning():
 
             print(f"============= INICIANDO JOGO {self.games_played} =============")
             self.start()
-            
+
             self.size_path = os.path.getsize(self.path)
             if self.games_played % 500 == 0:
                 self.agent.save()
-            
-            
+
+        self.agent.save()      
         print("Vitórias Q-Learning: " + str(self.agent_wins))
         print("Vitórias Minimax: " + str(self.minimax_wins))
         print("Empates: " + str(self.ties))
@@ -81,5 +82,5 @@ class GameLearning():
                 self.log_text(f"{self.games_played} - {order[1]}")
             
 game = GameLearning()
-game.begin_teaching(2)
+game.begin_teaching(1e5)
 
