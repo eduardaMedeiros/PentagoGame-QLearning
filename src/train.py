@@ -8,8 +8,10 @@ import agent as Agent
 class GameLearning():
     def __init__(self, alpha=0.8, gamma=0.7, eps=0.9):
         self.path = "agent_data.pkl"
+        self.txt = "log_train.txt"
 
         if os.path.isfile(self.path):
+            self.size_path = os.path.getsize(self.path)
             with open(self.path, 'rb') as f:
                 self.agent = pickle.load(f)
         else:
@@ -23,17 +25,26 @@ class GameLearning():
         self.minimax_wins = 0
 
     def begin_teaching(self, episodes):
-        while self.games_played < episodes:
+        while (self.games_played < episodes) and (self.size_path <= 1 * 1024 * 1024 * 1024):
+            self.games_played += 1
             self.game = Pentago.Pentago()
+
             print(f"============= INICIANDO JOGO {self.games_played} =============")
             self.start()
-            self.games_played += 1
+            
+            self.size_path = os.path.getsize(self.path)
+            if self.games_played % 500 == 0:
+                self.agent.save()
+            
             
         print("Vitórias Q-Learning: " + str(self.agent_wins))
         print("Vitórias Minimax: " + str(self.minimax_wins))
         print("Empates: " + str(self.ties))
         
-        self.agent.save()
+    def log_text(self, txt):
+        if os.path.isfile(self.txt):
+            with open(self.txt, 'a') as f:
+                f.write(txt + "\n")
 
     def start(self):
         players = True if random.randint(0, 1) == 1 else False
@@ -52,13 +63,23 @@ class GameLearning():
             self.ties += 1
             print("Houve empate!")
         else:
-            print("O branco ganhou!") if self.game.white else print("O preto ganhou!")
-            
-            if(order[0] == "Minimax"):
-                self.minimax_wins += 1
-            else:
-                self.agent_wins += 1
-            
+            if (self.game.white):
+                if(order[0] == "Minimax"):
+                    self.minimax_wins += 1
+                else:
+                    self.agent_wins += 1
 
+                print("O branco ganhou!") 
+                self.log_text(f"{self.games_played} - {order[0]}")
+            else:
+                if(order[1] == "Minimax"):
+                    self.minimax_wins += 1
+                else:
+                    self.agent_wins += 1
+
+                print("O preto ganhou!")
+                self.log_text(f"{self.games_played} - {order[1]}")
+            
 game = GameLearning()
-game.begin_teaching(600)
+game.begin_teaching(2)
+
