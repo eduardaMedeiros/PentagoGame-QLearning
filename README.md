@@ -10,7 +10,7 @@ O Q-learning é um algoritmo de aprendizado por reforço que permite que um agen
 
 ### Agente Q-Learning
 
-1. Por questões de limitações do github, deve ser baixado o agente treinado para a sua máquina no link:
+1. Por questões de limitações do github, deve ser baixado o agente treinado para a sua máquina no link: [agent_data.pkl](https://drive.google.com/drive/folders/1LBSt7D-3sxEtloBZD2VZmnQxPwdOf7hX?usp=sharing)
 2. Após baixado, ele deve ser inserido na raiz do repositório para que possa jogar e treiná-la. 
 
 ### Dependências
@@ -40,5 +40,5 @@ Após o treinamento, o agente Q-learning deve ser capaz de jogar o Pentago contr
 
 ## Integrantes do grupo
 
-Carolina Gimenez
-Eduarda Medeiros
+- Carolina Gimenez
+- Eduarda Medeiros
