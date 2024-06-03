@@ -1,4 +1,2 @@
 __pycache__
-log_train.txt
-q_table.csv
 agent_data.pkl

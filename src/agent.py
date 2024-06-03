@@ -144,12 +144,3 @@ class Agent():
         f = open(path, 'wb')
         pickle.dump(self, f)
         f.close()
-                    
-    def save_crv(self, filename='q_table.csv'):
-        states = list(next(iter(self.Q.values())).keys())
-        with open(filename, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([""] + states)
-
-            for actions, value in self.Q.items():
-                writer.writerow([actions] + [value[state] for state in states])
